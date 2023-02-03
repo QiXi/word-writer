@@ -1,6 +1,8 @@
 # WordWriter [![Release](https://jitpack.io/v/QiXi/word-writer.svg?style=flat-square)](https://jitpack.io/#QiXi/word-writer)
 Typewriter animation text in Compose UI
 
+<img src="sample/screenshots/word-writer.gif" width="600" height="644">
+
 ## Usage
 
 ```kotlin
