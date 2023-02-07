@@ -26,9 +26,11 @@ class StringSplitter(var text: String, val delimiter: String = " ") : Splitter, 
 
     override fun next(): String {
         var end = text.indexOf(delimiter, position)
-        end = if (end == -1) length else end + delimiter.length
+        if (end == -1) {
+            end = text.length
+        }
         val nextString = text.substring(position, end)
-        position = end
+        position = if (end < text.length) end + delimiter.length else end
         return nextString
     }
 
