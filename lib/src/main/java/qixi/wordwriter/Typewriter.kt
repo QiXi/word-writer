@@ -15,9 +15,21 @@ private val styleTransparent = SpanStyle(color = Color.Transparent, fontSize = 8
 private val styleNormal = SpanStyle(color = Color.Black, fontSize = 16.sp)
 
 @Composable
+fun TypewriterState(
+    writer: Writer = TypewriterData(),
+    textState: State<String>,
+    startStyle: SpanStyle = styleTransparent,
+    targetStyle: SpanStyle = styleNormal,
+    animationSpec: AnimationSpec<Float> = tween(durationMillis = 150, easing = FastOutSlowInEasing),
+    finishedListener: (() -> Unit)? = null
+): AnnotatedString {
+    return Typewriter(writer = writer, text = textState.value, startStyle, targetStyle, animationSpec, finishedListener)
+}
+
+@Composable
 fun Typewriter(
     writer: Writer = TypewriterData(),
-    text: State<String>,
+    text: String,
     startStyle: SpanStyle = styleTransparent,
     targetStyle: SpanStyle = styleNormal,
     animationSpec: AnimationSpec<Float> = tween(durationMillis = 150, easing = FastOutSlowInEasing),
@@ -26,8 +38,8 @@ fun Typewriter(
 
     val writerDate = remember { writer }
     val animation = remember { Animatable(0f) }
-    LaunchedEffect(text.value) {
-        writerDate.reset(text.value)
+    LaunchedEffect(text) {
+        writerDate.reset(text)
         while (writerDate.hasNext()) {
             writerDate.next()
             animation.snapTo(0f)
@@ -36,7 +48,7 @@ fun Typewriter(
         finishedListener?.invoke()
     }
     val builder = AnnotatedString.Builder(capacity = 128)
-    builder.append(text.value)
+    builder.append(text)
     var start = writerDate.startIndex
     var end = writerDate.endIndex
     if (builder.length < writerDate.endIndex) {
